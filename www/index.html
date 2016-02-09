@@ -18,15 +18,15 @@
 <body data-ng-app="NFC" data-ng-controller="AppController">
 
 <ion-pane>
-    <ion-header-bar class="bar-royal">
-        <h1 class="title">IUT NFC LECTEUR</h1>
+    <ion-header-bar class="bar-royal" style="background: #34495e url('img/logo.png') center no-repeat; background-size: 200px;">
+        <h1 class="title"></h1>
         <button class="button button-icon icon ion-android-close" ng-click="clear()" data-ng-if="tag.id"></button>
     </ion-header-bar>
     <ion-content>
         <div data-ng-if="!tag.id">
             <div class="card">
                 <div class="item item-text-wrap center">
-                    Scan a tag to being.
+                    En attente du tag...
                 </div>
             </div>
         </div>
