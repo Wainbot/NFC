@@ -1,10 +1,16 @@
-angular.module('NFC', ['ionic', 'nfcFilters', 'ngCordova'])
+angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
 
-    .controller('AppController', function ($scope, nfcService) {
+    .controller('AppController', function ($scope, nfcService, REST) {
         $scope.tag = nfcService.tag;
+
         $scope.clear = function () {
             nfcService.clearTag();
         };
+
+        REST.getBuilding($scope.tag)
+            .then(function(response) {
+                $scope.building = response;
+            });
     })
 
     .factory('nfcService', function ($rootScope, $ionicPlatform, $cordovaDialogs) {
@@ -22,7 +28,6 @@ angular.module('NFC', ['ionic', 'nfcFilters', 'ngCordova'])
             }, function (reason) {
                 alert("Error adding NFC Listener " + reason);
             });
-
         });
 
         return {
