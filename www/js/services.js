@@ -79,4 +79,43 @@ angular.module('NFC.services', [])
                 return deferred.promise;
             }
         };
+    })
+    .factory('nfcService', function ($rootScope, $ionicPlatform, $cordovaDialogs, $q) {
+        var tag = {};
+
+        $ionicPlatform.ready(function () {
+            nfc.addNdefListener(function (nfcEvent) {
+                $cordovaDialogs.beep(1);
+                console.log(JSON.stringify(nfcEvent.tag, null, 4));
+                $rootScope.$apply(function () {
+                    angular.copy(nfcEvent.tag, tag);
+                });
+            }, function () {
+                console.log("Listening for NDEF Tags.");
+            }, function (reason) {
+                //alert("Error adding NFC Listener " + reason);
+            });
+        });
+
+        return {
+            tag: tag,
+
+            clearTag: function () {
+                angular.copy({}, this.tag);
+            },
+            getNFC: function () {
+                var deferred = $q.defer();
+                $ionicPlatform.ready(function () {
+                    nfc.enabled(
+                        function () {
+                            deferred.resolve(true);
+                        },
+                        function () {
+                            deferred.reject(false);
+                        }
+                    );
+                });
+                return deferred.promise;
+            }
+        };
     });

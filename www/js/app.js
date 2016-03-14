@@ -1,40 +1,21 @@
 angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
 
-    .controller('AppController', function ($scope, nfcService, REST) {
-        $scope.tag = nfcService.tag;
+    .controller('AppController', function ($rootScope, $scope, nfcService, REST) {
+        nfcService.getNFC()
+            .then(function () {
+                $scope.nfcIsEnabled = true;
+                $scope.tag          = nfcService.tag;
 
-        $scope.clear = function () {
-            nfcService.clearTag();
-        };
+                $scope.clear = function () {
+                    nfcService.clearTag();
+                };
 
-        REST.getBuilding($scope.tag)
-            .then(function(response) {
-                $scope.building = response;
-            });
-    })
+                REST.getBuilding($scope.tag)
+                    .then(function (response) {
+                        $scope.building = response;
+                    });
 
-    .factory('nfcService', function ($rootScope, $ionicPlatform, $cordovaDialogs) {
-        var tag = {};
-
-        $ionicPlatform.ready(function () {
-            nfc.addNdefListener(function (nfcEvent) {
-                $cordovaDialogs.beep(3);
-                console.log(JSON.stringify(nfcEvent.tag, null, 4));
-                $rootScope.$apply(function () {
-                    angular.copy(nfcEvent.tag, tag);
-                });
             }, function () {
-                console.log("Listening for NDEF Tags.");
-            }, function (reason) {
-                alert("Error adding NFC Listener " + reason);
+                $scope.nfcIsEnabled = false;
             });
-        });
-
-        return {
-            tag: tag,
-
-            clearTag: function () {
-                angular.copy({}, this.tag);
-            }
-        };
     });

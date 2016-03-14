@@ -1,21 +1,16 @@
-@import 'ionic.app.css';
-
+@import url(ionic.app.css);
 dt {
-    float: left;
-    font-weight: normal;
-    margin-right: 0.25em;
-}
+  float: left;
+  font-weight: normal;
+  margin-right: 0.25em; }
 
-dt:after
-{
-    content:": ";
-}
+dt:after {
+  content: ": "; }
 
 dd {
-    font-weight: bold;
-}
+  font-weight: bold; }
 
 .center {
-    text-align: center;
-}
+  text-align: center; }
 
+/*# sourceMappingURL=style.css.map */

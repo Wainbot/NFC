@@ -13,6 +13,7 @@
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
     <script src="js/filters.js"></script>
+    <script src="js/services.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body data-ng-app="NFC" data-ng-controller="AppController">
@@ -23,45 +24,56 @@
         <button class="button button-icon icon ion-android-close" ng-click="clear()" data-ng-if="tag.id"></button>
     </ion-header-bar>
     <ion-content>
-        <div data-ng-if="!tag.id">
-            <div class="card">
-                <div class="item item-text-wrap center">
-                    En attente du tag...
+        <div data-ng-show="nfcIsEnabled">
+            <div data-ng-if="!tag.id">
+                <div class="card">
+                    <div class="item item-text-wrap center">
+                        En attente du tag...
+                    </div>
+                </div>
+            </div>
+            <div data-ng-if="tag.id">
+                <div class="card">
+                    <div class="item item-text-wrap">
+                        <dl>
+                            <dt>Tag Id</dt>
+                            <dd>{{ tag.id | bytesToHexString }}</dd>
+                            <dt>Tag Type</dt>
+                            <dd>{{ tag.type }}</dd>
+                            <dt>Max Size</dt>
+                            <dd>{{ tag.maxSize }} bytes</dd>
+                            <dt>Is Writable</dt>
+                            <dd>{{ tag.isWritable }}</dd>
+                            <dt>Can Make Read Only</dt>
+                            <dd>{{ tag.canMakeReadOnly }}</dd>
+                        </dl>
+                        <div class="card" data-ng-repeat="record in tag.ndefMessage">
+                            <div class="item item-divider">
+                                Record {{$index + 1}} <br/>
+                            </div>
+                            <div class="item item-text-wrap">
+                                <dl>
+                                    <dt>TNF</dt>
+                                    <dd>{{ record.tnf | tnfToString }}</dd>
+                                    <dt>Record Type</dt>
+                                    <dd>{{ record.type | bytesToString }}</dd>
+                                    <dt ng-if="record.id">Record Id</dt>
+                                    <dd ng-if="record.id">{{ record.id | bytesToString }}</dd>
+                                    <dt>Payload</dt>
+                                    <dd>{{ record | decodePayload }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div data-ng-if="tag.id">
+        <div data-ng-hide="nfcIsEnabled">
             <div class="card">
-                <div class="item item-text-wrap">
-                    <dl>
-                        <dt>Tag Id</dt>
-                        <dd>{{ tag.id | bytesToHexString }}</dd>
-                        <dt>Tag Type</dt>
-                        <dd>{{ tag.type }}</dd>
-                        <dt>Max Size</dt>
-                        <dd>{{ tag.maxSize }} bytes</dd>
-                        <dt>Is Writable</dt>
-                        <dd>{{ tag.isWritable }}</dd>
-                        <dt>Can Make Read Only</dt>
-                        <dd>{{ tag.canMakeReadOnly }}</dd>
-                    </dl>
-                    <div class="card" data-ng-repeat="record in tag.ndefMessage">
-                        <div class="item item-divider">
-                            Record {{$index + 1}} <br/>
-                        </div>
-                        <div class="item item-text-wrap">
-                            <dl>
-                                <dt>TNF</dt>
-                                <dd>{{ record.tnf | tnfToString }}</dd>
-                                <dt>Record Type</dt>
-                                <dd>{{ record.type | bytesToString }}</dd>
-                                <dt ng-if="record.id">Record Id</dt>
-                                <dd ng-if="record.id">{{ record.id | bytesToString }}</dd>
-                                <dt>Payload</dt>
-                                <dd>{{ record | decodePayload }}</dd>
-                            </dl>
-                        </div>
-                    </div>
+                <div class="item item-text-wrap center">
+                    <p>
+                        La fonctionnalité NFC n'est pas disponible ou n'est pas activée sur cet appareil
+                    </p>
                 </div>
             </div>
         </div>
