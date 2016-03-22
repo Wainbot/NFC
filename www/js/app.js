@@ -3,7 +3,7 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
     .controller('AppController', function ($rootScope, $scope, nfcService, REST) {
         REST.getListBuildings()
             .then(function (response) {
-                $scope.buildings = response;
+                $scope.buildings = response.buildings;
             }, function (error) {
                 $rootScope.error = error;
             });
@@ -11,18 +11,24 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
         nfcService.getNFC()
             .then(function () {
                 $scope.nfcIsEnabled = true;
-                $scope.tag = nfcService.tag;
 
                 $scope.clear = function () {
-                    nfcService.clearTag();
+                    nfcService.clearTag().then(function(response) {
+                        $rootScope.toto = response;
+                        $scope.tag = response;
+                    });
                 };
 
-                //REST.getBuilding($scope.tag.id)
-                //    .then(function (response) {
-                //        $scope.building = response;
-                //    }, function (error) {
-                //        $rootScope.error = error;
-                //    });
+                nfcService.tag.then(function(response) {
+                    $rootScope.toto = response;
+                    $scope.tag = response;
+                    REST.getBuilding($scope.tag.id)
+                        .then(function (response) {
+                            $scope.building = response;
+                        }, function (error) {
+                            $rootScope.error = error;
+                        });
+                });
             }, function () {
                 $scope.nfcIsEnabled = false;
             });

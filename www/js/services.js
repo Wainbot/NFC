@@ -68,27 +68,41 @@ angular.module('NFC.services', [])
             send: function (req) {
                 var deferred = $q.defer();
 
-                $http(req).then(function (response) {
-                    console.log(response);
-                    deferred.resolve(response);
-                }, function (error) {
-                    console.error(error);
-                    deferred.reject(error);
-                });
+                $http(req)
+                    .success(function (response) {
+                        console.log(response);
+                        deferred.resolve(response);
+                    })
+                    .error(function (error) {
+                        console.error(error);
+                        deferred.reject(error);
+                    });
 
                 return deferred.promise;
             }
         };
     })
     .factory('nfcService', function ($rootScope, $ionicPlatform, $cordovaDialogs, $q) {
+        var hexChar = ["0", "1", "2", "3", "4", "5", "6", "7","8", "9", "A", "B", "C", "D", "E", "F"];
+
+        function byteToHex(b) {
+            return hexChar[(b >> 4) & 0x0f] + hexChar[b & 0x0f];
+        }
+
         var tag = {};
+        var deferred = $q.defer();
 
         $ionicPlatform.ready(function () {
             nfc.addNdefListener(function (nfcEvent) {
                 $cordovaDialogs.beep(1);
-                console.log(JSON.stringify(nfcEvent.tag, null, 4));
                 $rootScope.$apply(function () {
                     angular.copy(nfcEvent.tag, tag);
+                    var hexa = "";
+                    tag.id.forEach(function(val) {
+                        hexa += byteToHex(val).toLowerCase();
+                    });
+                    tag.id = hexa.trim();
+                    deferred.resolve(tag);
                 });
             }, function () {
                 console.log("Listening for NDEF Tags.");
@@ -98,10 +112,16 @@ angular.module('NFC.services', [])
         });
 
         return {
-            tag: tag,
+            tag: deferred.promise,
 
             clearTag: function () {
+                var def = $q.defer();
+
                 angular.copy({}, this.tag);
+
+                def.resolve(this.tag);
+
+                return def.promise;
             },
             getNFC: function () {
                 var deferred = $q.defer();

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
 
     <title></title>
 
@@ -24,7 +25,9 @@
         <button class="button button-icon icon ion-android-close" ng-click="clear()" data-ng-if="tag.id"></button>
     </ion-header-bar>
     <ion-content>
-        <pre data-ng-if="$root.error" style="background: red; color: #FFF;">{{$root.error}}</pre>
+        <pre style="background: skyblue; color: #FFF;">{{$root.toto}}</pre>
+        <pre data-ng-if="$root.error" style="background: tomato; color: #FFF;">{{$root.error}}</pre>
+        <pre data-ng-if="$root.success" style="background: springgreen; color: #FFF;">{{$root.success}}</pre>
         <div data-ng-show="nfcIsEnabled">
             <div data-ng-if="!tag.id">
                 <div class="card">
