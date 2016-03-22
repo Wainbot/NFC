@@ -24,8 +24,20 @@
         <button class="button button-icon icon ion-android-close" ng-click="clear()" data-ng-if="tag.id"></button>
     </ion-header-bar>
     <ion-content>
+        <pre data-ng-if="$root.error" style="background: red; color: #FFF;">{{$root.error}}</pre>
         <div data-ng-show="nfcIsEnabled">
             <div data-ng-if="!tag.id">
+                <div class="card">
+                    <div class="item item-text-wrap center">
+                        <ul data-ng-if="buildings.length > 0">
+                            <li data-ng-repeat="build in buildings">
+                                {{build.name}}
+                            </li>
+                        </ul>
+                        <h1 data-ng-if="buildings.length === 0">Aucun building</h1>
+                    </div>
+                </div>
+            </div><div data-ng-if="!tag.id">
                 <div class="card">
                     <div class="item item-text-wrap center">
                         En attente du tag...
@@ -34,36 +46,8 @@
             </div>
             <div data-ng-if="tag.id">
                 <div class="card">
-                    <div class="item item-text-wrap">
-                        <dl>
-                            <dt>Tag Id</dt>
-                            <dd>{{ tag.id | bytesToHexString }}</dd>
-                            <dt>Tag Type</dt>
-                            <dd>{{ tag.type }}</dd>
-                            <dt>Max Size</dt>
-                            <dd>{{ tag.maxSize }} bytes</dd>
-                            <dt>Is Writable</dt>
-                            <dd>{{ tag.isWritable }}</dd>
-                            <dt>Can Make Read Only</dt>
-                            <dd>{{ tag.canMakeReadOnly }}</dd>
-                        </dl>
-                        <div class="card" data-ng-repeat="record in tag.ndefMessage">
-                            <div class="item item-divider">
-                                Record {{$index + 1}} <br/>
-                            </div>
-                            <div class="item item-text-wrap">
-                                <dl>
-                                    <dt>TNF</dt>
-                                    <dd>{{ record.tnf | tnfToString }}</dd>
-                                    <dt>Record Type</dt>
-                                    <dd>{{ record.type | bytesToString }}</dd>
-                                    <dt ng-if="record.id">Record Id</dt>
-                                    <dd ng-if="record.id">{{ record.id | bytesToString }}</dd>
-                                    <dt>Payload</dt>
-                                    <dd>{{ record | decodePayload }}</dd>
-                                </dl>
-                            </div>
-                        </div>
+                    <div class="item item-text-wrap text-center">
+                        <pre>{{building}}</pre>
                     </div>
                 </div>
             </div>

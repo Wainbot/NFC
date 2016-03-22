@@ -1,11 +1,11 @@
 angular.module('NFC.services', [])
     .service('REST', function (Request) {
-        var url = '/rest';
+        var url = 'http://10.0.2.5/rest';
 
         return {
             getListBuildings: function () {
                 return Request.send({
-                    method: 'GET',
+                    method: 'get',
                     url: url + '/building'
                 });
             },
