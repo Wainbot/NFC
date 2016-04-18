@@ -13,4 +13,27 @@ dd {
 .center {
   text-align: center; }
 
+.bloc-warning-nfc .icon-alert-nfc {
+  font-size: 40pt;
+  color: #ff6633; }
+.bloc-warning-nfc .info-warning-nfc {
+  font-weight: bolder;
+  text-align: justify;
+  font-size: 9pt; }
+
+.bloc-waiting-tag i {
+  font-size: 40pt;
+  color: #ff6633; }
+.bloc-waiting-tag p {
+  margin-top: 20px; }
+
+.bloc-not-build i {
+  font-size: 40pt;
+  color: #ff6633; }
+.bloc-not-build p {
+  margin: 20px 0; }
+
+.bloc-item-building h2 {
+  margin-top: 10px; }
+
 /*# sourceMappingURL=style.css.map */

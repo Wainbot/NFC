@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
 
     <title></title>
 
@@ -20,46 +21,70 @@
 <body data-ng-app="NFC" data-ng-controller="AppController">
 
 <ion-pane>
-    <ion-header-bar class="bar-royal" style="background: #34495e url('img/logo.png') center no-repeat; background-size: 200px;">
+    <ion-header-bar class="bar-royal"
+                    style="background: #ff6633 url('img/logo.png') center no-repeat; background-size: 200px;">
         <h1 class="title"></h1>
         <button class="button button-icon icon ion-android-close" ng-click="clear()" data-ng-if="tag.id"></button>
     </ion-header-bar>
     <ion-content>
-        <pre style="background: skyblue; color: #FFF;">{{$root.toto}}</pre>
-        <pre data-ng-if="$root.error" style="background: tomato; color: #FFF;">{{$root.error}}</pre>
-        <pre data-ng-if="$root.success" style="background: springgreen; color: #FFF;">{{$root.success}}</pre>
         <div data-ng-show="nfcIsEnabled">
             <div data-ng-if="!tag.id">
                 <div class="card">
-                    <div class="item item-text-wrap center">
-                        <ul data-ng-if="buildings.length > 0">
-                            <li data-ng-repeat="build in buildings">
-                                {{build.name}}
-                            </li>
-                        </ul>
-                        <h1 data-ng-if="buildings.length === 0">Aucun building</h1>
-                    </div>
-                </div>
-            </div><div data-ng-if="!tag.id">
-                <div class="card">
-                    <div class="item item-text-wrap center">
-                        En attente du tag...
+                    <div class="item item-text-wrap center bloc-waiting-tag">
+                        <i class="icon ion-loading-c"></i>
+                        <p>En attente d'un tag...</p>
                     </div>
                 </div>
             </div>
             <div data-ng-if="tag.id">
+                <div class="list card">
+                    <div class="item">
+                        <h2>{{building.name}}</h2>
+                        <p>{{building.description}}</p>
+                    </div>
+                    <div class="item item-image">
+                        <img src="{{building.img}}">
+                    </div>
+                    <div class="list">
+                        <div class="item item-divider">
+                            Étages
+                        </div>
+                        <a class="item item-avatar bloc-item-building" href="#"
+                           data-ng-repeat="level in building.levels">
+                            <img src="{{level.img}}" alt="">
+                            <h2>Étage n°{{level.level}}</h2>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div data-ng-if="!tag.id">
                 <div class="card">
-                    <div class="item item-text-wrap text-center">
-                        <pre>{{building}}</pre>
+                    <div class="list" data-ng-if="buildings.length > 0">
+                        <a data-ng-repeat="build in buildings" class="item item-avatar" href="#">
+                            <img src="{{build.img}}">
+                            <h2>{{build.name}}</h2>
+                            <p>{{build.description}}</p>
+                        </a>
+                    </div>
+                    <!-- TODO <div data-ng-if="buildings.length === 0">-->
+                    <div class="text-center bloc-not-build" data-ng-if="true">
+                        <i class="icon ion-sad"></i>
+                        <p>Il n'y a pas d'établissement enregistré.</p>
                     </div>
                 </div>
             </div>
         </div>
         <div data-ng-hide="nfcIsEnabled">
             <div class="card">
-                <div class="item item-text-wrap center">
-                    <p>
-                        La fonctionnalité NFC n'est pas disponible ou n'est pas activée sur cet appareil
+                <div class="item item-text-wrap center bloc-warning-nfc">
+                    <i class="icon ion-alert-circled icon-alert-nfc"></i>
+                    <p style="margin-top: 20px;">
+                        La fonctionnalité NFC n'est pas disponible ou n'est pas activée sur cet appareil.
+                    </p>
+                    <br>
+                    <p class="info-warning-nfc">
+                        Pour accéder au contenu de l'application, activez la fonctionnalité NFC puis relancez
+                        l'application.
                     </p>
                 </div>
             </div>
