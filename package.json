@@ -16,5 +16,11 @@
   },
   "scripts": {
     "postinstall": "node ./node_modules/.bin/bower install"
-  }
+  },
+  "cordovaPlugins": [
+    "cordova-plugin-network-information"
+  ],
+  "cordovaPlatforms": [
+    "ios"
+  ]
 }

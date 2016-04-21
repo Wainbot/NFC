@@ -49,8 +49,7 @@
                         <div class="item item-divider">
                             Étages
                         </div>
-                        <a class="item item-avatar bloc-item-building" href="#"
-                           data-ng-repeat="level in building.levels">
+                        <a class="item item-avatar bloc-item-building" href data-ng-repeat="level in building.levels">
                             <img src="{{level.img}}" alt="">
                             <h2>Étage n°{{level.level}}</h2>
                         </a>
@@ -60,7 +59,7 @@
             <div data-ng-if="!tag.id">
                 <div class="card">
                     <div class="list" data-ng-if="buildings.length > 0">
-                        <a data-ng-repeat="build in buildings" class="item item-avatar" href="#">
+                        <a data-ng-repeat="build in buildings" class="item item-avatar" href data-ng-click="setTagByBuilding(build.id)">
                             <img src="{{build.img}}">
                             <h2>{{build.name}}</h2>
                             <p>{{build.description}}</p>
