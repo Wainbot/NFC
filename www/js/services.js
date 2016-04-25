@@ -1,6 +1,6 @@
 angular.module('NFC.services', [])
     .service('REST', function (Request) {
-        var url = 'http://10.0.2.5/rest';
+        var url = 'http://vps251441.ovh.net:3002/rest';
 
         return {
             getListBuildings: function () {
@@ -128,9 +128,11 @@ angular.module('NFC.services', [])
                 $ionicPlatform.ready(function () {
                     nfc.enabled(
                         function () {
+                            alert("NFC good !!!");
                             deferred.resolve(true);
                         },
                         function () {
+                            alert("NFC not good !!!");
                             deferred.reject(false);
                         }
                     );
