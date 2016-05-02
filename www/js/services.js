@@ -1,80 +1,77 @@
 angular.module('NFC.services', [])
-    .service('REST', function (Request) {
-        var url = 'http://vps251441.ovh.net:3002/rest';
+    .service('REST', function (Request, apiUrl) {
 
         return {
             getListBuildings: function () {
                 return Request.send({
-                    method: 'get',
-                    url: url + '/building'
+                    method: 'GET',
+                    url: apiUrl
                 });
             },
             addBuilding: function () {
                 return Request.send({
                     method: 'POST',
-                    url: url + '/building',
+                    url: apiUrl,
                     data: {}
                 });
             },
             updateBuilding: function (tagid) {
                 return Request.send({
                     method: 'PUT',
-                    url: url + '/building/' + tagid,
+                    url: apiUrl + '/' + tagid,
                     data: {}
                 });
             },
             deleteBuilding: function (tagid) {
                 return Request.send({
                     method: 'DELETE',
-                    url: url + '/building/' + tagid
+                    url: apiUrl + '/' + tagid
                 });
             },
             getBuilding: function (tagid) {
                 return Request.send({
                     method: 'GET',
-                    url: url + '/building/' + tagid
+                    url: apiUrl + '/' + tagid
                 });
             },
             addLevel: function (tagid) {
                 return Request.send({
                     method: 'POST',
-                    url: url + '/building/' + tagid,
+                    url: apiUrl + '/' + tagid,
                     data: {}
                 });
             },
             updateLevel: function (tagid, level) {
                 return Request.send({
                     method: 'PUT',
-                    url: url + '/building/' + tagid + '/' + level,
+                    url: apiUrl + '/' + tagid + '/' + level,
                     data: {}
                 });
             },
             deleteLevel: function (tagid, level) {
                 return Request.send({
                     method: 'DELETE',
-                    url: url + '/building/' + tagid + '/' + level
+                    url: apiUrl + '/' + tagid + '/' + level
                 });
             },
             getLevel: function (tagid, level) {
                 return Request.send({
                     method: 'GET',
-                    url: url + '/building/' + tagid + '/' + level
+                    url: apiUrl + '/' + tagid + '/' + level
                 });
             }
         };
     })
-    .service('Request', function ($http, $q) {
+    .service('Request', function ($http, $q, $rootScope) {
         return {
             send: function (req) {
                 var deferred = $q.defer();
 
                 $http(req)
-                    .success(function (response) {
-                        console.log(response);
-                        deferred.resolve(response);
-                    })
-                    .error(function (error) {
-                        console.error(error);
+                    .then(function (response) {
+                        deferred.resolve(response.data);
+                    }, function (error) {
+                        $rootScope.error = error;
                         deferred.reject(error);
                     });
 
@@ -83,7 +80,7 @@ angular.module('NFC.services', [])
         };
     })
     .factory('nfcService', function ($rootScope, $ionicPlatform, $cordovaDialogs, $q) {
-        var hexChar = ["0", "1", "2", "3", "4", "5", "6", "7","8", "9", "A", "B", "C", "D", "E", "F"];
+        var hexChar = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 
         function byteToHex(b) {
             return hexChar[(b >> 4) & 0x0f] + hexChar[b & 0x0f];
@@ -98,7 +95,7 @@ angular.module('NFC.services', [])
                 $rootScope.$apply(function () {
                     angular.copy(nfcEvent.tag, tag);
                     var hexa = "";
-                    tag.id.forEach(function(val) {
+                    tag.id.forEach(function (val) {
                         hexa += byteToHex(val).toLowerCase();
                     });
                     tag.id = hexa.trim();
@@ -107,7 +104,7 @@ angular.module('NFC.services', [])
             }, function () {
                 console.log("Listening for NDEF Tags.");
             }, function (reason) {
-                //alert("Error adding NFC Listener " + reason);
+                console.log("Error adding NFC Listener " + reason);
             });
         });
 
@@ -128,11 +125,9 @@ angular.module('NFC.services', [])
                 $ionicPlatform.ready(function () {
                     nfc.enabled(
                         function () {
-                            alert("NFC good !!!");
                             deferred.resolve(true);
                         },
                         function () {
-                            alert("NFC not good !!!");
                             deferred.reject(false);
                         }
                     );
