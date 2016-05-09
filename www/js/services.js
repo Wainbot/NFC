@@ -1,59 +1,43 @@
 angular.module('NFC.services', [])
-    .service('REST', function (Request, apiUrl) {
 
+    /**
+     * Service REST pour executer les requêtes Rest
+     */
+    .service('REST', function (Request, apiUrl) {
         return {
+
+            /**
+             * Retourne la liste des bâtiments
+             *
+             * @returns {*}
+             */
             getListBuildings: function () {
                 return Request.send({
                     method: 'GET',
                     url: apiUrl
                 });
             },
-            addBuilding: function () {
-                return Request.send({
-                    method: 'POST',
-                    url: apiUrl,
-                    data: {}
-                });
-            },
-            updateBuilding: function (tagid) {
-                return Request.send({
-                    method: 'PUT',
-                    url: apiUrl + '/' + tagid,
-                    data: {}
-                });
-            },
-            deleteBuilding: function (tagid) {
-                return Request.send({
-                    method: 'DELETE',
-                    url: apiUrl + '/' + tagid
-                });
-            },
+
+            /**
+             * Retourne le bâtiment passé en paramètre
+             *
+             * @param tagid
+             * @returns {*}
+             */
             getBuilding: function (tagid) {
                 return Request.send({
                     method: 'GET',
                     url: apiUrl + '/' + tagid
                 });
             },
-            addLevel: function (tagid) {
-                return Request.send({
-                    method: 'POST',
-                    url: apiUrl + '/' + tagid,
-                    data: {}
-                });
-            },
-            updateLevel: function (tagid, level) {
-                return Request.send({
-                    method: 'PUT',
-                    url: apiUrl + '/' + tagid + '/' + level,
-                    data: {}
-                });
-            },
-            deleteLevel: function (tagid, level) {
-                return Request.send({
-                    method: 'DELETE',
-                    url: apiUrl + '/' + tagid + '/' + level
-                });
-            },
+
+            /**
+             * Retourne l'étage passé en paramètre
+             *
+             * @param tagid
+             * @param level
+             * @returns {*}
+             */
             getLevel: function (tagid, level) {
                 return Request.send({
                     method: 'GET',
@@ -62,6 +46,10 @@ angular.module('NFC.services', [])
             }
         };
     })
+
+    /**
+     * Service Request pour factoriser les requêtes Rest
+     */
     .service('Request', function ($http, $q, $rootScope) {
         return {
             send: function (req) {
@@ -79,6 +67,10 @@ angular.module('NFC.services', [])
             }
         };
     })
+
+    /**
+     * Factory nfcService pour la gestion de la technologie nfc
+     */
     .factory('nfcService', function ($rootScope, $ionicPlatform, $cordovaDialogs, $q) {
         var hexChar = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 
@@ -86,53 +78,62 @@ angular.module('NFC.services', [])
             return hexChar[(b >> 4) & 0x0f] + hexChar[b & 0x0f];
         }
 
-        var tag = {};
-        var deferred = $q.defer();
+        function EncodTag(tag) {
+            var hexa = "";
+            tag.id.forEach(function (val) {
+                hexa += byteToHex(val).toLowerCase();
+            });
+            tag.id = hexa.trim();
+
+            return tag
+        }
+
+        //var tag = {};
+        //var deferred = $q.defer();
 
         $ionicPlatform.ready(function () {
-            nfc.addNdefListener(function (nfcEvent) {
-                $cordovaDialogs.beep(1);
-                $rootScope.$apply(function () {
-                    angular.copy(nfcEvent.tag, tag);
-                    var hexa = "";
-                    tag.id.forEach(function (val) {
-                        hexa += byteToHex(val).toLowerCase();
+            nfc.enabled(
+                function () {
+                    $rootScope.$broadcast('nfcEnabled', "nfc is enabled");
+                    nfc.addNdefListener(function (nfcEvent) {
+                        $cordovaDialogs.beep(1);
+                        $rootScope.$broadcast('tagScanned', EncodTag(nfcEvent.tag));
+                    }, function () {
+                        console.log("Listening for NDEF Tags.");
+                    }, function (reason) {
+                        //$rootScope.$emit('nfcEnabled', false);
+                        console.log("Error adding NFC Listener " + reason);
                     });
-                    tag.id = hexa.trim();
-                    deferred.resolve(tag);
-                });
-            }, function () {
-                console.log("Listening for NDEF Tags.");
-            }, function (reason) {
-                console.log("Error adding NFC Listener " + reason);
-            });
+                },
+                function () {
+                    $rootScope.$broadcast('nfcEnabled', "nfc is not enabled");
+                }
+            );
         });
 
         return {
-            tag: deferred.promise,
+            //tag: deferred.promise,
 
-            clearTag: function () {
-                var def = $q.defer();
+            //clearTag: function () {
+            //    var def = $q.defer();
 
-                angular.copy({}, this.tag);
+            //angular.copy({}, this.tag);
 
-                def.resolve(this.tag);
+            //def.resolve(this.tag);
 
-                return def.promise;
-            },
-            getNFC: function () {
-                var deferred = $q.defer();
-                $ionicPlatform.ready(function () {
-                    nfc.enabled(
-                        function () {
-                            deferred.resolve(true);
-                        },
-                        function () {
-                            deferred.reject(false);
-                        }
-                    );
-                });
-                return deferred.promise;
-            }
+            //return def.promise;
+            //},
+            //getNFC: function () {
+            //    $ionicPlatform.ready(function () {
+            //        nfc.enabled(
+            //            function () {
+            //                $rootScope.$emit('nfcEnabled', true);
+            //            },
+            //            function () {
+            //                $rootScope.$emit('nfcEnabled', false);
+            //            }
+            //        );
+            //    });
+            //}
         };
     });

@@ -19,7 +19,8 @@ dd {
 .bloc-warning-nfc .info-warning-nfc {
   font-weight: bolder;
   text-align: justify;
-  font-size: 9pt; }
+  font-size: 9pt;
+  line-height: 13px; }
 
 .bloc-waiting-tag i {
   font-size: 40pt;

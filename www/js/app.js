@@ -10,7 +10,9 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
     })
 
     .controller('AppController', function ($rootScope, $scope, $ionicModal, nfcService, REST, apiUrl) {
-        $scope.tag = {id: null};
+        $scope.nfcIsEnabled = false;
+        $scope.tag = { id: null };
+        $scope.building = {};
 
         REST.getListBuildings()
             .then(function (response) {
@@ -20,23 +22,20 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
                 });
             });
 
-        nfcService.getNFC()
-            .then(function () {
-                $scope.nfcIsEnabled = true;
+        $rootScope.$on('nfcEnabled', function (event, message) {
+            //alert(message);
+            $scope.nfcIsEnabled = true;
+        });
 
-                $scope.clear = function () {
-                    nfcService.clearTag().then(function (response) {
-                        $scope.tag = response;
-                    });
-                };
+        $rootScope.$on('tagScanned', function (event, tag) {
+            $scope.tag = tag;
+            //alert($scope.tag.id);
+            $scope.setTagByBuilding($scope.tag.id);
+        });
 
-                nfcService.tag.then(function (response) {
-                    $scope.tag = response;
-                    $scope.setTagByBuilding($scope.tag.id);
-                });
-            }, function () {
-                $scope.nfcIsEnabled = false;
-            });
+        $scope.clear = function () {
+            $scope.tag = {};
+        };
 
         $scope.setTagByBuilding = function (id) {
             $scope.tag.id = id;
@@ -56,4 +55,13 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
             scope: $scope,
             animation: 'slide-in-up'
         });
+
+        $scope.openModal = function (level) {
+            REST.getLevel($scope.building.tag, level)
+                .then(function (response) {
+                    $scope.modal.show();
+                    $scope.modal.level = response;
+                    $scope.modal.level.img = apiUrl + '/image/' + $scope.modal.level.imageid;
+                });
+        };
     });
