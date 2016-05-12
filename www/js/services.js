@@ -88,9 +88,6 @@ angular.module('NFC.services', [])
             return tag
         }
 
-        //var tag = {};
-        //var deferred = $q.defer();
-
         $ionicPlatform.ready(function () {
             nfc.enabled(
                 function () {
@@ -99,10 +96,9 @@ angular.module('NFC.services', [])
                         $cordovaDialogs.beep(1);
                         $rootScope.$broadcast('tagScanned', EncodTag(nfcEvent.tag));
                     }, function () {
-                        console.log("Listening for NDEF Tags.");
+                        //console.log("Listening for NDEF Tags.");
                     }, function (reason) {
-                        //$rootScope.$emit('nfcEnabled', false);
-                        console.log("Error adding NFC Listener " + reason);
+                        //console.log("Error adding NFC Listener " + reason);
                     });
                 },
                 function () {
@@ -111,29 +107,5 @@ angular.module('NFC.services', [])
             );
         });
 
-        return {
-            //tag: deferred.promise,
-
-            //clearTag: function () {
-            //    var def = $q.defer();
-
-            //angular.copy({}, this.tag);
-
-            //def.resolve(this.tag);
-
-            //return def.promise;
-            //},
-            //getNFC: function () {
-            //    $ionicPlatform.ready(function () {
-            //        nfc.enabled(
-            //            function () {
-            //                $rootScope.$emit('nfcEnabled', true);
-            //            },
-            //            function () {
-            //                $rootScope.$emit('nfcEnabled', false);
-            //            }
-            //        );
-            //    });
-            //}
-        };
+        return {};
     });

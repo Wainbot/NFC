@@ -1,5 +1,5 @@
 angular.module('nfcFilters', [])
-    .filter('bytesToHexString', function() {
+    .filter('bytesToHexString', function () {
         return function (input) {
             if (window.nfc) {
                 return nfc.bytesToHexString(input);
@@ -9,8 +9,8 @@ angular.module('nfcFilters', [])
         }
     })
 
-    .filter('bytesToString', function() {
-        return function(input) {
+    .filter('bytesToString', function () {
+        return function (input) {
             if (window.nfc) {
                 return nfc.bytesToString(input);
             } else {
@@ -19,7 +19,7 @@ angular.module('nfcFilters', [])
         };
     })
 
-    .filter('tnfToString', function() {
+    .filter('tnfToString', function () {
 
         function tnfToString(tnf) {
             var value = tnf;
@@ -53,7 +53,7 @@ angular.module('nfcFilters', [])
             return value;
         }
 
-        return function(input) {
+        return function (input) {
 
             if (window.ndef) {
                 return tnfToString(input);
@@ -64,7 +64,7 @@ angular.module('nfcFilters', [])
         };
     })
 
-    .filter('decodePayload', function() {
+    .filter('decodePayload', function () {
 
         function decodePayload(record) {
 
@@ -78,13 +78,9 @@ angular.module('nfcFilters', [])
                 payload = ndef.uriHelper.decodePayload(record.payload);
 
             } else {
-
-                // we don't know how to translate this type, try and print it out.
-                // your app should know how to process tags it receives
-
-                var printableData = record.payload.map(function(i) {
+                var printableData = record.payload.map(function (i) {
                     if (i <= 0x1F) {
-                        return 0x2e; // unprintable, replace with "."
+                        return 0x2e;
                     } else {
                         return i;
                     }
@@ -96,7 +92,7 @@ angular.module('nfcFilters', [])
             return payload;
         }
 
-        return function(input) {
+        return function (input) {
 
             if (window.nfc) {
                 return decodePayload(input);
