@@ -9,28 +9,32 @@
 
 ## Installation
 
-`$ git clone https://github.com/Wainbot/NFC`
-
-`$ cd NFC/`
-
-`$ npm install`
-
+```bash
+$ git clone https://github.com/Wainbot/NFC
+$ cd NFC/
+$ npm install
+```
 
 ## Launch app on local
 
 (in full page)
 
-`$ ionic serve`
-
+```bash
+$ ionic serve
+```
 
 OR
 
 
 (for android + ios)
 
-`$ ionic serve -l`
+```bash
+$ ionic serve -l
+```
 
 
 ## Build app on phone (android)
 
-`$ ionic run android`
+```bash
+$ ionic run android
+```
