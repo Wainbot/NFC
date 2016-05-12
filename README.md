@@ -2,18 +2,16 @@
 
 Only works if server is started
 
-Server REST : https://github.com/Daxeme/BuildingNFC
-
-Web App Admin : https://github.com/Wainbot/ng-buildings
+- Server REST : https://github.com/Daxeme/BuildingNFC
+- Web App Admin : https://github.com/Wainbot/ng-buildings
 
 ## Contributors
 
-* Parpex Regis
-* Clémenceau Damien
-* Froment Jérémy
+- Parpex Regis
+- Clémenceau Damien
+- Froment Jérémy
 
-
-## Installation
+## How to install
 
 ```bash
 $ git clone https://github.com/Wainbot/NFC
@@ -21,13 +19,13 @@ $ cd NFC/
 $ npm install
 ```
 
-## Launch app on local
+## How to launch in local
 
 ```bash
 $ ionic serve -l
 ```
 
-## Build app on phone (android)
+## How to build on android
 
 ```bash
 $ ionic run android
