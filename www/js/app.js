@@ -9,9 +9,42 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
         });
     })
 
+    /**
+     * Configuration pour récupérer les requêtes http
+     *
+     * Dans notre cas, incrémentation/décrémentation dans la variable isLoading du nombre de requêtes
+     * http afin d'afficher un loader ou de bloquer des boutons lorsque des requêtes sont en cours
+     */
+    .config(['$httpProvider', function ($httpProvider) {
+        $httpProvider.interceptors.push(['$rootScope', function ($rootScope) {
+            $rootScope.isLoading = 0;
+            return {
+                'request': function (config) {
+                    $rootScope.isLoading++;
+                    return config;
+                },
+                'requestError': function (rejection) {
+                    $rootScope.isLoading = Math.max(0, $rootScope.isLoading - 1);
+                    return rejection;
+                },
+                'response': function (response) {
+                    $rootScope.isLoading = Math.max(0, $rootScope.isLoading - 1);
+                    return response;
+                },
+                'responseError': function (rejection) {
+                    $rootScope.isLoading = Math.max(0, $rootScope.isLoading - 1);
+                    return rejection;
+                }
+            };
+        }]);
+    }])
+
+    /**
+     * Contrôleur de l'application
+     */
     .controller('AppController', function ($rootScope, $scope, $ionicModal, nfcService, REST, apiUrl) {
         $scope.nfcIsEnabled = false;
-        $scope.tag = { id: null };
+        $scope.tag = {id: null};
         $scope.building = {};
 
         REST.getListBuildings()

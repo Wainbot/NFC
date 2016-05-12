@@ -37,4 +37,17 @@ dd {
 .bloc-item-building h2 {
   margin-top: 10px; }
 
+.loader-global {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  right: 50%;
+  bottom: 50%;
+  font-size: 70pt;
+  color: #ff6633;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px; }
+
 /*# sourceMappingURL=style.css.map */
