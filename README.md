@@ -1,5 +1,10 @@
 # Mobile NFC App
 
+Only works if server is started
+
+Server REST : https://github.com/Daxeme/BuildingNFC
+Web App Admin : https://github.com/Wainbot/ng-buildings
+
 ## Contributors
 
 * Parpex Regis
