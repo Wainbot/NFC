@@ -57,14 +57,14 @@
                     <p>{{building.description}}</p>
                 </div>
                 <div class="item item-image">
-                    <img data-ng-src="{{building.img}}">
+                    <img data-ng-src="{{building.pic}}">
                 </div>
                 <div class="list">
                     <div class="item item-divider">
                         Étages
                     </div>
                     <a class="item item-avatar bloc-item-building" data-ng-click="openModal(level.level)" href data-ng-repeat="level in building.levels">
-                        <img data-ng-src="{{level.img}}" alt="">
+                        <img data-ng-src="{{level.pic}}" alt="">
                         <h2>Étage n°{{level.level}}</h2>
                     </a>
                 </div>
@@ -74,7 +74,7 @@
             <div class="card">
                 <div class="list" data-ng-if="buildings.length > 0">
                     <a data-ng-repeat="build in buildings" class="item item-avatar" href data-ng-click="setTagByBuilding(build.tag)">
-                        <img data-ng-src="{{build.img}}">
+                        <img data-ng-src="{{build.pic}}">
                         <h2>{{build.name}}</h2>
                         <p>{{build.description}}</p>
                     </a>
@@ -97,7 +97,7 @@
             <h1 class="title" style="color: #FFF;">Étage n°{{modal.level.number}}</h1>
         </ion-header-bar>
         <ion-content padding="">
-            <img data-ng-src="{{modal.level.img}}" width="100%" alt="">
+            <img data-ng-src="{{modal.level.pic}}" width="100%" alt="">
         </ion-content>
     </ion-modal-view>
 </script>

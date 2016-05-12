@@ -17,9 +17,9 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
         REST.getListBuildings()
             .then(function (response) {
                 $scope.buildings = response.buildings;
-                $scope.buildings.forEach(function (val) {
-                    val.img = apiUrl + '/image/' + val.imageid;
-                });
+                //$scope.buildings.forEach(function (val) {
+                //    val.img = apiUrl + '/image/' + val.imageid;
+                //});
             });
 
         $rootScope.$on('nfcEnabled', function (event, message) {
@@ -42,10 +42,10 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
             REST.getBuilding($scope.tag.id)
                 .then(function (response) {
                     $scope.building = response;
-                    $scope.building.img = apiUrl + '/image/' + $scope.building.imageid;
-                    $scope.building.levels.forEach(function (val) {
-                        val.img = apiUrl + '/image/' + val.imageid;
-                    });
+                    //$scope.building.img = apiUrl + '/image/' + $scope.building.imageid;
+                    //$scope.building.levels.forEach(function (val) {
+                    //    val.img = apiUrl + '/image/' + val.imageid;
+                    //});
                 });
         };
 
@@ -61,7 +61,7 @@ angular.module('NFC', ['ionic', 'NFC.services', 'nfcFilters', 'ngCordova'])
                 .then(function (response) {
                     $scope.modal.show();
                     $scope.modal.level = response;
-                    $scope.modal.level.img = apiUrl + '/image/' + $scope.modal.level.imageid;
+                    //$scope.modal.level.img = apiUrl + '/image/' + $scope.modal.level.imageid;
                 });
         };
     });
